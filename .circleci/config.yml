@@ -4,8 +4,6 @@ executors:
     docker:
       - image: circleci/node:11.10
     working_directory: ~/gitlet
-
-version: 2
 jobs:
   build:
     executor:
