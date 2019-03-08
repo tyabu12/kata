@@ -1,5 +1,7 @@
 # Gitlet
 
+[![CircleCI](https://circleci.com/gh/tyabu12/kata/tree/gitlet.svg?style=svg)](https://circleci.com/gh/tyabu12/kata/tree/gitlet)
+
 To understand Git mechanism.
 
 I'm NOT author of Gitlet (maryrosecook does) .
