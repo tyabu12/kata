@@ -1,0 +1,13 @@
+{
+  "name": "gitlet",
+  "version": "0.1.0",
+  "description": "Gitlet clone to understand its idea.",
+  "license": "MIT",
+  "main": "./src/index.js",
+  "scripts": {
+    "test": "jasmine-node spec"
+  },
+  "devDependencies": {
+    "jasmine-node": "^1.16.2"
+  }
+}
