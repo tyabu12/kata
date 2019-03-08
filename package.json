@@ -4,10 +4,12 @@
   "description": "Gitlet clone to understand its idea.",
   "license": "MIT",
   "scripts": {
+    "build": "babel ./src -d ./build",
     "start": "babel-node ./src/cli",
     "test": "mocha --require @babel/register --reporter spec"
   },
   "devDependencies": {
+    "@babel/cli": "^7.2.3",
     "@babel/core": "^7.3.4",
     "@babel/node": "^7.2.2",
     "@babel/preset-env": "^7.3.4",

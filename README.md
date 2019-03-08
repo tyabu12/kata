@@ -19,8 +19,9 @@ This is a memo for my study.
 
 ```bash
 $ yarn install
+$ yarn build
 $ node
-> const gitlet = require("./src");
+> const gitlet = require("./build");
 > gitlet.init();
 { '.gitlet':
    { HEAD: 'ref: refs/heads/master\n',
