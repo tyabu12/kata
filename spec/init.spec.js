@@ -1,14 +1,14 @@
 "use strict";
 
 const fs = require("fs");
-const g = require("../src");
+const gitlet = require("../src");
 const testUtil = require("./test-util");
 
 describe("init", () => {
   beforeEach(testUtil.initTestDataDir);
 
   it("should create .gitlet/ and all required dirs", () => {
-    g.init();
+    gitlet.init();
 
     expect(
       fs.existsSync(__dirname + "/testData/repo1/.gitlet/objects/")
@@ -30,8 +30,8 @@ describe("init", () => {
   });
 
   it("should not change anything if init run twice", () => {
-    g.init();
-    g.init();
+    gitlet.init();
+    gitlet.init();
 
     expect(
       fs.existsSync(__dirname + "/testData/repo1/.gitlet/objects/")
@@ -55,12 +55,12 @@ describe("init", () => {
   it("should not crash when config is a directory", () => {
     const dir = __dirname + "/testData/repo1/";
     fs.mkdirSync(dir + "config");
-    g.init();
+    gitlet.init();
   });
 
   describe("bare repos", () => {
     it("should put all gitlet files and folders in root if specify bare", () => {
-      g.init({ bare: true });
+      gitlet.init({ bare: true });
 
       expect(fs.existsSync(__dirname + "/testData/repo1/objects/")).toEqual(
         true
