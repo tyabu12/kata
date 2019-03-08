@@ -1,8 +1,7 @@
-"use strict";
-
-const fs = require("fs");
-const gitlet = require("../src");
-const testUtil = require("./test-util");
+import { expect } from "chai";
+import * as fs from "fs";
+import * as gitlet from "../src";
+import { testUtil } from "./test-util";
 
 describe("init", () => {
   beforeEach(testUtil.initTestDataDir);
@@ -12,13 +11,13 @@ describe("init", () => {
 
     expect(
       fs.existsSync(__dirname + "/testData/repo1/.gitlet/objects/")
-    ).toEqual(true);
-    expect(fs.existsSync(__dirname + "/testData/repo1/.gitlet/refs/")).toEqual(
+    ).to.equal(true);
+    expect(fs.existsSync(__dirname + "/testData/repo1/.gitlet/refs/")).to.equal(
       true
     );
     expect(
       fs.existsSync(__dirname + "/testData/repo1/.gitlet/refs/heads/")
-    ).toEqual(true);
+    ).to.equal(true);
     testUtil.expectFile(
       __dirname + "/testData/repo1/.gitlet/HEAD",
       "ref: refs/heads/master\n"
@@ -35,13 +34,13 @@ describe("init", () => {
 
     expect(
       fs.existsSync(__dirname + "/testData/repo1/.gitlet/objects/")
-    ).toEqual(true);
-    expect(fs.existsSync(__dirname + "/testData/repo1/.gitlet/refs/")).toEqual(
+    ).to.equal(true);
+    expect(fs.existsSync(__dirname + "/testData/repo1/.gitlet/refs/")).to.equal(
       true
     );
     expect(
       fs.existsSync(__dirname + "/testData/repo1/.gitlet/refs/heads/")
-    ).toEqual(true);
+    ).to.equal(true);
     testUtil.expectFile(
       __dirname + "/testData/repo1/.gitlet/HEAD",
       "ref: refs/heads/master\n"
@@ -62,11 +61,11 @@ describe("init", () => {
     it("should put all gitlet files and folders in root if specify bare", () => {
       gitlet.init({ bare: true });
 
-      expect(fs.existsSync(__dirname + "/testData/repo1/objects/")).toEqual(
+      expect(fs.existsSync(__dirname + "/testData/repo1/objects/")).to.equal(
         true
       );
-      expect(fs.existsSync(__dirname + "/testData/repo1/refs/")).toEqual(true);
-      expect(fs.existsSync(__dirname + "/testData/repo1/refs/heads/")).toEqual(
+      expect(fs.existsSync(__dirname + "/testData/repo1/refs/")).to.equal(true);
+      expect(fs.existsSync(__dirname + "/testData/repo1/refs/heads/")).to.equal(
         true
       );
       testUtil.expectFile(

@@ -1,16 +1,17 @@
-var fs = require("fs");
-var nodePath = require("path");
+import * as fs from "fs";
+import * as path from "path";
+import { expect } from "chai";
 
-var originalDateToString = Date.prototype.toString;
+const originalDateToString = Date.prototype.toString;
 
-var testUtil = (module.exports = {
+const testUtil = {
   expectFile: function(path, content) {
-    expect(fs.readFileSync(path, "utf8")).toEqual(content);
+    expect(fs.readFileSync(path, "utf8")).to.equal(content);
   },
 
   rmdirSyncRecursive: function(dir) {
     fs.readdirSync(dir).forEach(function(fileName) {
-      var filePath = nodePath.join(dir, fileName);
+      var filePath = path.join(dir, fileName);
       if (fs.statSync(filePath).isDirectory()) {
         testUtil.rmdirSyncRecursive(filePath);
       } else {
@@ -26,7 +27,7 @@ var testUtil = (module.exports = {
       return testUtil.createFilesFromTree(structure, process.cwd());
 
     Object.keys(structure).forEach(function(name) {
-      var path = nodePath.join(prefix, name);
+      var path = path.join(prefix, name);
       if (typeof structure[name] === "string") {
         fs.writeFileSync(path, structure[name]);
       } else {
@@ -94,7 +95,7 @@ var testUtil = (module.exports = {
     process.chdir(testDataDir);
     fs.mkdirSync("repo1");
     process.chdir("repo1");
-    expect(fs.readdirSync(process.cwd()).length).toEqual(0);
+    expect(fs.readdirSync(process.cwd()).length).to.equal(0);
   },
 
   makeRemoteRepo: function() {
@@ -131,13 +132,15 @@ var testUtil = (module.exports = {
   },
 
   refHash: function(ref) {
-    return testUtil.readFile(nodePath.join(".gitlet", ref));
+    return testUtil.readFile(path.join(".gitlet", ref));
   },
 
   headHash: function() {
     var ref = testUtil
       .readFile(".gitlet/HEAD")
       .match("ref: (refs/heads/.+)")[1];
-    return testUtil.readFile(nodePath.join(".gitlet", ref));
+    return testUtil.readFile(path.join(".gitlet", ref));
   }
-});
+};
+
+export { testUtil };

@@ -3,11 +3,19 @@
   "version": "0.1.0",
   "description": "Gitlet clone to understand its idea.",
   "license": "MIT",
-  "main": "./src/index.js",
   "scripts": {
-    "test": "jasmine-node spec"
+    "start": "babel-node ./src/cli",
+    "test": "mocha --require @babel/register --reporter spec"
   },
   "devDependencies": {
-    "jasmine-node": "^1.16.2"
+    "@babel/core": "^7.3.4",
+    "@babel/node": "^7.2.2",
+    "@babel/preset-env": "^7.3.4",
+    "@babel/register": "^7.0.0",
+    "chai": "^4.2.0",
+    "mocha": "^6.0.2"
+  },
+  "dependencies": {
+    "flags": "^0.1.3"
   }
 }

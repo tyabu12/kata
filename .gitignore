@@ -6,6 +6,5 @@ yarn-error.log*
 
 node_modules/
 
-spec/testData/
-
+test/testData/
 .gitlet/

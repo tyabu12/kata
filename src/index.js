@@ -1,5 +1,3 @@
-const init = require("./init");
+import init from "./init";
 
-module.exports = {
-  init
-};
+export { init };

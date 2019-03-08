@@ -1,10 +1,8 @@
-"use strict";
+import * as fs from "fs";
+import * as nodePath from "path";
+import * as util from "./util";
 
-const fs = require("fs");
-const nodePath = require("path");
-const util = require("./util");
-
-const gitletDir = dir => {
+function gitletDir(dir) {
   if (!fs.existsSync(dir)) return undefined;
 
   const potentialConfigFile = nodePath.join(dir, "config");
@@ -23,18 +21,49 @@ const gitletDir = dir => {
   } else {
     return undefined;
   }
-};
+}
 
-const gitletPath = path => {
+export function gitletPath(path) {
   const gDir = gitletDir(process.cwd());
   if (gDir !== undefined) {
     return nodePath.join(gDir, path || "");
   }
-};
+}
 
-const inRepo = () => gitletPath() !== undefined;
+export function inRepo() {
+  return gitletPath() !== undefined;
+}
 
-const writeFilesFromTree = (tree, prefix) => {
+export function assertInRepo() {
+  if (!inRepo()) {
+    throw new Error("not a Gitlet repository");
+  }
+}
+
+export function workingCopyPath(path) {
+  return nodePath.join(files.gitletPath(), "..", path || "");
+}
+
+export function pathFromRepoRoot(path) {
+  return nodePath.relative(
+    workingCopyPath(),
+    nodePath.join(process.cwd(), path)
+  );
+}
+
+export function lsRecursive(path) {
+  if (!fs.existsSync(path)) {
+    return [];
+  } else if (fs.statSync().isFile()) {
+    return [path];
+  } else if (fs.statSync().isDirectory()) {
+    return fs.readdirSync(path).reduce((fileList, dirChild) => {
+      return fileList.concat(files.lsRecursive(nodePath.join(path, dirChild)));
+    }, []);
+  }
+}
+
+export function writeFilesFromTree(tree, prefix) {
   Object.keys(tree).forEach(name => {
     const path = nodePath.join(prefix, name);
     if (util.isString(tree[name])) {
@@ -46,10 +75,4 @@ const writeFilesFromTree = (tree, prefix) => {
       writeFilesFromTree(tree[name], path);
     }
   });
-};
-
-module.exports = {
-  gitletPath,
-  inRepo,
-  writeFilesFromTree
-};
+}

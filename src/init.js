@@ -1,9 +1,7 @@
-"use strict";
+import * as files from "./common/files";
+import * as config from "./common/config";
 
-const files = require("./common/files");
-const config = require("./common/config");
-
-module.exports = opts => {
+export default opts => {
   if (files.inRepo()) return;
 
   opts = opts || {};

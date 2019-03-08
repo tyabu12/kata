@@ -1,7 +1,5 @@
 "use strict";
 
-const isString = thing => typeof thing === "string";
-
-module.exports = {
-  isString
-};
+export function isString(thing) {
+  return typeof thing === "string";
+}
