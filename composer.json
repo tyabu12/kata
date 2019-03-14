@@ -1,5 +1,5 @@
 {
-    "name": "koel",
+    "name": "tyabu12/koel",
     "type": "project",
     "description": "To learn Laravel.",
     "keywords": [],
@@ -54,6 +54,8 @@
         ],
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi"
-        ]
+        ],
+        "test": "phpunit --colors=always --order-by=defects --stop-on-defect",
+        "coverage": "phpunit --colors=always --coverage-clover=coverage.xml"
     }
 }
