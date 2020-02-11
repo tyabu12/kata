@@ -2,6 +2,7 @@
 
 [![CircleCI](https://circleci.com/gh/tyabu12/kata/tree/laracom.svg?style=svg)](https://circleci.com/gh/tyabu12/kata/tree/laracom)
 [![codecov](https://codecov.io/gh/tyabu12/kata/branch/laracom/graph/badge.svg)](https://codecov.io/gh/tyabu12/branch/laracom)
+![PHPStan level 8](https://img.shields.io/badge/PHPStan-level%208-brightgreen.svg?style=flat)
 
 To learn Laravel.
 

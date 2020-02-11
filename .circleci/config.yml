@@ -25,5 +25,6 @@ jobs:
           key: node-v1-{{ checksum "yarn.lock" }}
           paths:
             - node_modules
+      - run: ./vendor/bin/phpstan analyse
       - run: composer coverage
       - run: bash <(curl -s https://codecov.io/bash)

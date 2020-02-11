@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\User;
+use App\Shop\Customers\Customer;
+use App\Shop\Customers\Repositories\Interfaces\CustomerRepositoryInterface;
+use App\Shop\Customers\Requests\CreateCustomerRequest;
+use App\Shop\Customers\Requests\RegisterCustomerRequest;
 use Illuminate\Foundation\Auth\RegistersUsers;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 class RegisterController extends Controller
 {
@@ -28,45 +30,44 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/accounts';
+
+    /**
+     * @var CustomerRepositoryInterface
+     */
+    private $customerRepo;
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(CustomerRepositoryInterface $customerRepo)
     {
         $this->middleware('guest');
-    }
-
-    /**
-     * Get a validator for an incoming registration request.
-     *
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    protected function validator(array $data)
-    {
-        return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-        ]);
+        $this->customerRepo = $customerRepo;
     }
 
     /**
      * Create a new user instance after a valid registration.
      *
-     * @param  array  $data
-     * @return \App\User
+     * @param  array $data
+     * @return Customer
      */
-    protected function create(array $data)
+    protected function create(array $data): Customer
     {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
+        return $this->customerRepo->createCustomer($data);
+    }
+
+    /**
+     * @param RegisterCustomerRequest $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function register(RegisterCustomerRequest $request): \Illuminate\Http\RedirectResponse
+    {
+        $customer = $this->create($request->except('_method', '_token'));
+        Auth::login($customer);
+
+        return redirect()->route('accounts');
     }
 }

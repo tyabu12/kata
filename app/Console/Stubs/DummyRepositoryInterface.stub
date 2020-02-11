@@ -1,0 +1,54 @@
+<?php
+
+namespace App\Shop\Dummies\Repositories\Interfaces;
+
+use App\Shop\Dummies\Dummy;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Collection;
+use Jsdecena\Baserepo\BaseRepositoryInterface;
+
+interface DummyRepositoryInterface extends BaseRepositoryInterface
+{
+    /**
+     * List all the Dummies
+     *
+     * @param string $order
+     * @param string $sort
+     * @param string[] $except
+     * @return Collection
+     */
+    public function listDummies(string $order = 'id', string $sort = 'desc', $except = []): Collection;
+
+    /**
+     * Create a Dummy
+     *
+     * @param array $params
+     * @return Dummy
+     * @throws \InvalidArgumentException
+     */
+    public function createDummy(array $params): Dummy;
+
+    /**
+     * Update the dummy
+     *
+     * @param array $params
+     * @return Dummy
+     */
+    public function updateDummy(array $params): Dummy;
+
+    /**
+     * Find the dummy by ID
+     *
+     * @param int $id
+     * @return Dummy
+     * @throws ModelNotFoundException
+     */
+    public function findDummyById(int $id): Dummy;
+
+    /**
+     * Delete the dummy
+     *
+     * @return bool
+     */
+    public function deleteDummy(): bool;
+}
