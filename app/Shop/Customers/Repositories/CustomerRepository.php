@@ -58,7 +58,7 @@ class CustomerRepository extends BaseRepository implements CustomerRepositoryInt
 
             return $customer;
         } catch (QueryException $e) {
-            throw new CreateCustomerInvalidArgumentException($e->getMessage());
+            throw new CreateCustomerInvalidArgumentException($e->getMessage(), 500, $e);
         }
     }
 
@@ -74,7 +74,7 @@ class CustomerRepository extends BaseRepository implements CustomerRepositoryInt
         try {
             return $this->update($params);
         } catch (QueryException $e) {
-            throw new UpdateCustomerInvalidArgumentException($e->getMessage());
+            throw new UpdateCustomerInvalidArgumentException($e->getMessage(), $e->getCode(), $e);
         }
     }
 
@@ -90,7 +90,7 @@ class CustomerRepository extends BaseRepository implements CustomerRepositoryInt
         try {
             return $this->findOneOrFail($id);
         } catch (ModelNotFoundException $e) {
-            throw new CustomerNotFoundException($e->getMessage());
+            throw new CustomerNotFoundException($e->getMessage(), $e->getCode(), $e);
         }
     }
 

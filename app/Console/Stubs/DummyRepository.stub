@@ -49,7 +49,7 @@ class DummyRepository extends BaseRepository implements DummyRepositoryInterface
             $dummy->saveOrFail();
             return $dummy;
         } catch (QueryException $e) {
-            throw new InvalidArgumentException($e->getMessage());
+            throw new InvalidArgumentException($e->getMessage(), $e->getCode(), $e);
         }
     }
 
@@ -64,7 +64,7 @@ class DummyRepository extends BaseRepository implements DummyRepositoryInterface
         try {
             return $this->update($params);
         } catch (QueryException $e) {
-            throw new UpdateCustomerInvalidArgumentException($e->getMessage());
+            throw new UpdateCustomerInvalidArgumentException($e->getMessage(), $e->getCode(), $e);
         }
     }
 
@@ -78,7 +78,7 @@ class DummyRepository extends BaseRepository implements DummyRepositoryInterface
         try {
             return $this->findOneOrFail($id);
         } catch (ModelNotFoundException $e) {
-            throw new ModelNotFoundException($e->getMessage());
+            throw new ModelNotFoundException($e->getMessage(), $e->getCode(), $e);
         }
     }
 
