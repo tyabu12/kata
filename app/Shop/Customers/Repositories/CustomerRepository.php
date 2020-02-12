@@ -26,7 +26,7 @@ class CustomerRepository extends BaseRepository implements CustomerRepositoryInt
     }
 
     /**
-     * List all the Customers
+     * List all the customers
      *
      * @param string $order
      * @param string $sort
@@ -39,7 +39,7 @@ class CustomerRepository extends BaseRepository implements CustomerRepositoryInt
     }
 
     /**
-     * Create a Customer
+     * Create a customer
      *
      * @param array $params
      * @return Customer

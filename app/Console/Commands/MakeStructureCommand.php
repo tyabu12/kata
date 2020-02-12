@@ -101,8 +101,9 @@ class MakeStructureCommand extends Command
     {
         $pluralModel = Str::plural($model);
         $modelVar = lcfirst($model);
+        $pluralVar = Str::plural($modelVar);
         $dummyRepository = $this->filesystem->get($dummySrc);
-        $repositoryContent = str_replace(['Dummy', 'Dummies', 'dummy'], [$model, $pluralModel, $modelVar], $dummyRepository);
+        $repositoryContent = str_replace(['Dummy', 'Dummies', 'dummy', 'dummies'], [$model, $pluralModel, $modelVar, $pluralVar], $dummyRepository);
         $this->filesystem->copy($dummySrc, $destPath);
         $this->filesystem->put($destPath, $repositoryContent);
     }

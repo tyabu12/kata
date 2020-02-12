@@ -10,7 +10,7 @@ use Jsdecena\Baserepo\BaseRepositoryInterface;
 interface DummyRepositoryInterface extends BaseRepositoryInterface
 {
     /**
-     * List all the Dummies
+     * List all the dummies
      *
      * @param string $order
      * @param string $sort
@@ -20,7 +20,7 @@ interface DummyRepositoryInterface extends BaseRepositoryInterface
     public function listDummies(string $order = 'id', string $sort = 'desc', array $columns = ['*']): Collection;
 
     /**
-     * Create a Dummy
+     * Create a dummy
      *
      * @param array $params
      * @return Dummy

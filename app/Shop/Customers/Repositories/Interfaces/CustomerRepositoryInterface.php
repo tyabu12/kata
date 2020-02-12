@@ -10,7 +10,7 @@ use Jsdecena\Baserepo\BaseRepositoryInterface;
 interface CustomerRepositoryInterface extends BaseRepositoryInterface
 {
     /**
-     * List all the Customers
+     * List all the customers
      *
      * @param string $order
      * @param string $sort
@@ -20,7 +20,7 @@ interface CustomerRepositoryInterface extends BaseRepositoryInterface
     public function listCustomers(string $order = 'id', string $sort = 'desc', array $columns = ['*']): Collection;
 
     /**
-     * Create a Customer
+     * Create a customer
      *
      * @param array $params
      * @return Customer

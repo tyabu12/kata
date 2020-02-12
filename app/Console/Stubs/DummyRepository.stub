@@ -8,6 +8,7 @@ use Illuminate\Database\QueryException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Collection;
 use Jsdecena\Baserepo\BaseRepository;
+use \InvalidArgumentException;
 
 class DummyRepository extends BaseRepository implements DummyRepositoryInterface
 {
@@ -23,7 +24,7 @@ class DummyRepository extends BaseRepository implements DummyRepositoryInterface
     }
 
     /**
-     * List all the Dummies
+     * List all the dummies
      *
      * @param string $order
      * @param string $sort
@@ -36,7 +37,7 @@ class DummyRepository extends BaseRepository implements DummyRepositoryInterface
     }
 
     /**
-     * Create Dummy
+     * Create a dummy
      *
      * @param array $params
      * @return Dummy
@@ -57,18 +58,21 @@ class DummyRepository extends BaseRepository implements DummyRepositoryInterface
      * Update the dummy
      *
      * @param array $params
-     * @return Dummy
+     * @return bool
+     * @throws InvalidArgumentException
      */
-    public function updateDummy(array $params): Dummy
+    public function updateDummy(array $params): bool
     {
         try {
             return $this->update($params);
         } catch (QueryException $e) {
-            throw new UpdateCustomerInvalidArgumentException($e->getMessage(), $e->getCode(), $e);
+            throw new InvalidArgumentException($e->getMessage(), $e->getCode(), $e);
         }
     }
 
     /**
+     * Find the dummy by ID
+     *
      * @param int $id
      * @return Dummy
      * @throws ModelNotFoundException
@@ -83,7 +87,7 @@ class DummyRepository extends BaseRepository implements DummyRepositoryInterface
     }
 
     /**
-     * Delete a dummy
+     * Delete the dummy
      *
      * @return bool
      */
