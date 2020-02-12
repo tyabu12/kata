@@ -3,8 +3,11 @@
 namespace Tests\Unit;
 
 use App\Shop\Customers\Customer;
+use App\Shop\Customers\Exceptions\CreateCustomerInvalidArgumentException;
 use App\Shop\Customers\Exceptions\CustomerNotFoundException;
+use App\Shop\Customers\Exceptions\UpdateCustomerInvalidArgumentException;
 use App\Shop\Customers\Repositories\CustomerRepository;
+use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
 class CustomerUnitTest extends TestCase
@@ -45,6 +48,31 @@ class CustomerUnitTest extends TestCase
         $this->assertEquals($data['email'], $found->email);
     }
 
+    public function testFailWhenUpdatingCustomerNameWithNull(): void
+    {
+        $this->expectException(UpdateCustomerInvalidArgumentException::class);
+
+        /** @var Customer */
+        $customer = factory(Customer::class)->create();
+        $customerRepo = new CustomerRepository($customer);
+        $customerRepo->updateCustomer(['name' => null]);
+    }
+
+    public function testCanUpdateCustomerPassword(): void
+    {
+        /** @var Customer */
+        $customer = factory(Customer::class)->create();
+        $customerRepo = new CustomerRepository($customer);
+        $customerRepo->updateCustomer([
+            'name' => $this->faker->name,
+            'email' => $this->faker->email,
+            'status' => 1,
+            'password' => 'unknown',
+        ]);
+
+        $this->assertTrue(Hash::check('unknown', bcrypt($customer->password)));
+    }
+
     public function testCanUpdateCustomer(): void
     {
         $update = [
@@ -59,6 +87,15 @@ class CustomerUnitTest extends TestCase
         $this->assertTrue($updated);
         $this->assertEquals($update['name'], $customer->name);
         $this->assertDatabaseHas('customers', $update);
+    }
+
+    public function testFailWhenCreatingCustomerByEmpty(): void
+    {
+        $this->expectException(CreateCustomerInvalidArgumentException::class);
+        $this->expectExceptionCode(500);
+
+        $customerRepo = new CustomerRepository(new Customer());
+        $customerRepo->createCustomer([]);
     }
 
     public function testCanCreateCustomer(): void
