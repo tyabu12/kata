@@ -14,10 +14,10 @@ interface CustomerRepositoryInterface extends BaseRepositoryInterface
      *
      * @param string $order
      * @param string $sort
-     * @param string[] $except
+     * @param string[] $columns
      * @return Collection
      */
-    public function listCustomers(string $order = 'id', string $sort = 'desc', $except = []): Collection;
+    public function listCustomers(string $order = 'id', string $sort = 'desc', array $columns = ['*']): Collection;
 
     /**
      * Create a Customer
@@ -32,9 +32,9 @@ interface CustomerRepositoryInterface extends BaseRepositoryInterface
      * Update the customer
      *
      * @param array $params
-     * @return Customer
+     * @return bool
      */
-    public function updateCustomer(array $params): Customer;
+    public function updateCustomer(array $params): bool;
 
     /**
      * Find the customer by ID

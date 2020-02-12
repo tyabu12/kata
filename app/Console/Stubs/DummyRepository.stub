@@ -27,12 +27,12 @@ class DummyRepository extends BaseRepository implements DummyRepositoryInterface
      *
      * @param string $order
      * @param string $sort
-     * @param array $except
-     * @return \Illuminate\Support\Collection
+     * @param string[] $columns
+     * @return Collection
      */
-    public function listDummies(string $order = 'id', string $sort = 'desc', $except = []): Collection
+    public function listDummies(string $order = 'id', string $sort = 'desc', array $columns = ['*']): Collection
     {
-        return $this->model->orderBy($order, $sort)->get()->except($except);
+        return $this->all($columns, $order, $sort);
     }
 
     /**
@@ -45,7 +45,9 @@ class DummyRepository extends BaseRepository implements DummyRepositoryInterface
     public function createDummy(array $params): Dummy
     {
         try {
-        	return Dummy::create($params);
+            $dummy = new Dummy($params);
+            $dummy->saveOrFail();
+            return $dummy;
         } catch (QueryException $e) {
             throw new InvalidArgumentException($e->getMessage());
         }
@@ -59,9 +61,11 @@ class DummyRepository extends BaseRepository implements DummyRepositoryInterface
      */
     public function updateDummy(array $params): Dummy
     {
-        $dummy = $this->findDummyById($this->model->id);
-        $dummy->update($params);
-        return $dummy;
+        try {
+            return $this->update($params);
+        } catch (QueryException $e) {
+            throw new UpdateCustomerInvalidArgumentException($e->getMessage());
+        }
     }
 
     /**
@@ -85,6 +89,6 @@ class DummyRepository extends BaseRepository implements DummyRepositoryInterface
      */
     public function deleteDummy(): bool
     {
-        return (bool) $this->model->delete();
+        return (bool) $this->delete();
     }
 }

@@ -4,6 +4,9 @@ namespace App\Shop\Customers\Repositories;
 
 use App\Shop\Customers\Customer;
 use App\Shop\Customers\Repositories\Interfaces\CustomerRepositoryInterface;
+use App\Shop\Customers\Exceptions\CreateCustomerInvalidArgumentException;
+use App\Shop\Customers\Exceptions\CustomerNotFoundException;
+use App\Shop\Customers\Exceptions\UpdateCustomerInvalidArgumentException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Collection;
@@ -27,12 +30,12 @@ class CustomerRepository extends BaseRepository implements CustomerRepositoryInt
      *
      * @param string $order
      * @param string $sort
-     * @param string[] $except
-     * @return \Illuminate\Support\Collection
+     * @param string[] $columns
+     * @return Collection
      */
-    public function listCustomers(string $order = 'id', string $sort = 'desc', $except = []): Collection
+    public function listCustomers(string $order = 'id', string $sort = 'desc', array $columns = ['*']): Collection
     {
-        return collect($this->model->orderBy($order, $sort)->get())->except($except);
+        return $this->all($columns, $order, $sort);
     }
 
     /**
@@ -40,14 +43,22 @@ class CustomerRepository extends BaseRepository implements CustomerRepositoryInt
      *
      * @param array $params
      * @return Customer
-     * @throws \InvalidArgumentException
+     * @throws CreateCustomerInvalidArgumentException
      */
     public function createCustomer(array $params): Customer
     {
         try {
-        	return Customer::create($params);
+            $data = collect($params)->except('password')->all();
+
+            $customer = new Customer($data);
+            if (isset($params['password'])) {
+                $customer->password = bcrypt($params['password']);
+            }
+            $customer->saveOrFail();
+
+            return $customer;
         } catch (QueryException $e) {
-            throw new \InvalidArgumentException($e->getMessage());
+            throw new CreateCustomerInvalidArgumentException($e->getMessage());
         }
     }
 
@@ -55,13 +66,16 @@ class CustomerRepository extends BaseRepository implements CustomerRepositoryInt
      * Update the customer
      *
      * @param array $params
-     * @return Customer
+     * @return bool
+     * @throws UpdateCustomerInvalidArgumentException
      */
-    public function updateCustomer(array $params): Customer
+    public function updateCustomer(array $params): bool
     {
-        $customer = $this->findCustomerById($this->model->id);
-        $customer->update($params);
-        return $customer;
+        try {
+            return $this->update($params);
+        } catch (QueryException $e) {
+            throw new UpdateCustomerInvalidArgumentException($e->getMessage());
+        }
     }
 
     /**
@@ -69,14 +83,14 @@ class CustomerRepository extends BaseRepository implements CustomerRepositoryInt
      *
      * @param int $id
      * @return Customer
-     * @throws ModelNotFoundException
+     * @throws CustomerNotFoundException
      */
     public function findCustomerById(int $id): Customer
     {
         try {
             return $this->findOneOrFail($id);
         } catch (ModelNotFoundException $e) {
-            throw new ModelNotFoundException($e->getMessage());
+            throw new CustomerNotFoundException($e->getMessage());
         }
     }
 
@@ -84,9 +98,10 @@ class CustomerRepository extends BaseRepository implements CustomerRepositoryInt
      * Delete the customer
      *
      * @return bool
+     * @throws \Exception
      */
     public function deleteCustomer(): bool
     {
-        return (bool) $this->model->delete();
+        return (bool) $this->delete();
     }
 }

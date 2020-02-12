@@ -14,10 +14,10 @@ interface DummyRepositoryInterface extends BaseRepositoryInterface
      *
      * @param string $order
      * @param string $sort
-     * @param string[] $except
+     * @param string[] $columns
      * @return Collection
      */
-    public function listDummies(string $order = 'id', string $sort = 'desc', $except = []): Collection;
+    public function listDummies(string $order = 'id', string $sort = 'desc', array $columns = ['*']): Collection;
 
     /**
      * Create a Dummy
@@ -32,9 +32,9 @@ interface DummyRepositoryInterface extends BaseRepositoryInterface
      * Update the dummy
      *
      * @param array $params
-     * @return Dummy
+     * @return bool
      */
-    public function updateDummy(array $params): Dummy;
+    public function updateDummy(array $params): bool;
 
     /**
      * Find the dummy by ID
