@@ -7,6 +7,7 @@ use App\Shop\Customers\Repositories\Interfaces\CustomerRepositoryInterface;
 use App\Shop\Customers\Exceptions\CreateCustomerInvalidArgumentException;
 use App\Shop\Customers\Exceptions\CustomerNotFoundException;
 use App\Shop\Customers\Exceptions\UpdateCustomerInvalidArgumentException;
+use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Collection;
@@ -14,7 +15,7 @@ use Jsdecena\Baserepo\BaseRepository;
 
 class CustomerRepository extends BaseRepository implements CustomerRepositoryInterface
 {
-	/**
+    /**
      * CustomerRepository constructor.
      *
      * @param Customer $customer
@@ -48,16 +49,9 @@ class CustomerRepository extends BaseRepository implements CustomerRepositoryInt
     public function createCustomer(array $params): Customer
     {
         try {
-            $data = collect($params)->except('password')->all();
-
-            $customer = new Customer($data);
-            if (isset($params['password'])) {
-                $customer->password = bcrypt($params['password']);
-            }
-            $customer->saveOrFail();
-
-            return $customer;
-        } catch (QueryException $e) {
+            $params['password'] = bcrypt($params['password']);
+            return $this->create($params);
+        } catch (Exception $e) {
             throw new CreateCustomerInvalidArgumentException($e->getMessage(), 500, $e);
         }
     }
